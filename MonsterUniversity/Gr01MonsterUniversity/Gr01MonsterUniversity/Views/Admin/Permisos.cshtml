@@ -1,0 +1,52 @@
+﻿@model Gr01MonsterUniversity.Models.PermisosViewModel
+
+@{
+    ViewBag.Title = "Asignación de Permisos";
+}
+
+<div class="page-header">
+    <h2 style="color: #1e3c72;">
+        <i class="glyphicon glyphicon-lock"></i> Permisos para: <b>@Model.NombrePerfil</b>
+    </h2>
+</div>
+
+@using (Html.BeginForm("GuardarPermisos", "Admin", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.CodigoPerfil)
+
+    <div class="panel panel-default" style="border-radius: 15px; overflow: hidden;">
+        <div class="panel-heading" style="background: #1e3c72; color: white;">
+            <h3 class="panel-title">Lista de Opciones Disponibles en el Menú</h3>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th width="50">Habilitar</th>
+                    <th>Código</th>
+                    <th>Descripción de la Opción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Opciones.Count; i++)
+                {
+                    <tr>
+                        <td class="text-center">
+                            <input type="checkbox" name="opcionesSeleccionadas"
+                                   value="@Model.Opciones[i].CodigoOpcion"
+                                   @(Model.Opciones[i].Asignada ? "checked" : "")
+                                   style="transform: scale(1.5);" />
+                        </td>
+                        <td><span class="label label-info">@Model.Opciones[i].CodigoOpcion</span></td>
+                        <td><b>@Model.Opciones[i].Descripcion</b></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="panel-footer text-right">
+            <a href="@Url.Action("Index")" class="btn btn-default">Cancelar</a>
+            <button type="submit" class="btn btn-primary" style="background: #1e3c72;">
+                <i class="glyphicon glyphicon-floppy-disk"></i> Guardar Cambios
+            </button>
+        </div>
+    </div>
+}

@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Gr01MonsterUniversity.Models.PEEEMP_EMPLE>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre Completo</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.PEEEMP_CODIGO</td>
+                <td>@item.PEEEMP_NOMBRES @item.PEEEMP_APELLIDOS</td>
+                <td>@item.PEEEMP_EMAIL</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.PEEEMP_CODIGO }, new { @class = "btn btn-sm btn-warning" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

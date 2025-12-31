@@ -1,0 +1,132 @@
+﻿@model Gr01MonsterUniversity.Models.AsignacionPerfilesViewModel
+
+@{
+    ViewBag.Title = "Asignación de Perfiles";
+}
+
+<div class="container" style="margin-top:30px;">
+    <div class="panel panel-default" style="border-radius:10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <div class="panel-heading" style="background:#f8f9fa; font-weight:bold;">Asignación de Perfiles de Usuario</div>
+        <div class="panel-body">
+
+            <div class="row" style="margin-bottom:25px;">
+                <div class="col-md-12">
+                    <label>Seleccione el Perfil:</label>
+                    @Html.DropDownList("SelectedPerfilId", (SelectList)ViewBag.Perfiles, "-- Seleccione --", new { @class = "form-control", id = "perfilDropdown" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5">
+                    <div style="text-align:center; margin-bottom:10px;"><strong>Usuarios Disponibles</strong></div>
+                    <div style="border:1px solid #ddd; padding:15px; border-radius:8px;">
+                        <div class="input-group" style="margin-bottom:10px;">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                            <input type="text" id="searchDisponibles" class="form-control" placeholder="Buscar usuario...">
+                        </div>
+                        <select id="lstDisponibles" multiple class="form-control" style="height:250px;"></select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 text-center" style="padding-top:80px;">
+                    <button id="btnAgregar" class="btn btn-primary btn-block" style="margin-bottom:10px;">
+                        <i class="glyphicon glyphicon-arrow-right"></i> Agregar
+                    </button>
+                    <button id="btnQuitar" class="btn btn-danger btn-block">
+                        <i class="glyphicon glyphicon-arrow-left"></i> Quitar
+                    </button>
+
+                    <hr />
+                    <button id="btnGuardar" class="btn btn-success btn-block" style="font-weight:bold;">
+                        <i class="glyphicon glyphicon-floppy-disk"></i> GUARDAR
+                    </button>
+                </div>
+
+                <div class="col-md-5">
+                    <div style="text-align:center; margin-bottom:10px;"><strong>Usuarios en este Perfil</strong></div>
+                    <div style="border:1px solid #ddd; padding:15px; border-radius:8px;">
+                        <div class="input-group" style="margin-bottom:10px;">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                            <input type="text" id="searchAsignados" class="form-control" placeholder="Buscar usuario...">
+                        </div>
+                        <select id="lstAsignados" multiple class="form-control" style="height:250px;"></select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+
+            // 1. Evento cuando cambia el perfil
+            $("#perfilDropdown").change(function () {
+                var perfilId = $(this).val();
+                if (!perfilId) {
+                    $("#lstDisponibles, #lstAsignados").empty();
+                    return;
+                }
+
+                $.post("@Url.Action("ObtenerListasUsuarios", "Admin")", { perfilId: perfilId }, function (data) {
+                    $("#lstDisponibles").empty();
+                    $("#lstAsignados").empty();
+
+                    data.disponibles.forEach(u => $("#lstDisponibles").append(new Option(u.id, u.id)));
+                    data.asignados.forEach(u => $("#lstAsignados").append(new Option(u.id, u.id)));
+                });
+            });
+
+            // 2. Mover a la derecha (Agregar)
+            $("#btnAgregar").click(function () {
+                $("#lstDisponibles option:selected").appendTo("#lstAsignados");
+            });
+
+            // 3. Mover a la izquierda (Quitar)
+            $("#btnQuitar").click(function () {
+                $("#lstAsignados option:selected").appendTo("#lstDisponibles");
+            });
+
+            // 4. Buscadores en tiempo real
+            $("#searchDisponibles").keyup(function () {
+                var val = $(this).val().toLowerCase();
+                $("#lstDisponibles option").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(val) > -1);
+                });
+            });
+
+            $("#searchAsignados").keyup(function () {
+                var val = $(this).val().toLowerCase();
+                $("#lstAsignados option").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(val) > -1);
+                });
+            });
+
+            // 5. Guardar cambios en la DB
+            $("#btnGuardar").click(function () {
+                var perfilId = $("#perfilDropdown").val();
+                if (!perfilId) {
+                    Swal.fire('Atención', 'Seleccione un perfil primero', 'warning');
+                    return;
+                }
+
+                var usuariosSeleccionados = [];
+                $("#lstAsignados option").each(function () {
+                    usuariosSeleccionados.push($(this).val());
+                });
+
+                $.post("@Url.Action("GuardarAsignacion", "Admin")", { perfilId: perfilId, usuarios: usuariosSeleccionados }, function (response) {
+                    if (response.success) {
+                        Swal.fire('¡Éxito!', response.message, 'success');
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                });
+            });
+
+        });
+    </script>
+}

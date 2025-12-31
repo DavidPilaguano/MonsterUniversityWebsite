@@ -1,0 +1,276 @@
+﻿@model Gr01MonsterUniversity.Models.UsuarioCompletoViewModel
+
+@{
+    ViewBag.Title = "Alta de Usuario";
+}
+
+<style>
+    body {
+        background-color: #fcfcfc;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .main-card {
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin-top: 30px;
+    }
+
+    .form-label {
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 5px;
+        display: block;
+        font-size: 13px;
+    }
+
+    .form-control-custom {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+        height: 38px;
+        box-shadow: none;
+        transition: all 0.3s;
+    }
+
+        .form-control-custom:focus {
+            border-color: #3498db;
+            background-color: #fff;
+        }
+
+    /* Pestañas */
+    .nav-tabs-custom {
+        border-bottom: 2px solid #eee;
+        margin-bottom: 25px;
+        margin-top: 30px;
+    }
+
+        .nav-tabs-custom > li > a {
+            color: #888;
+            border: none !important;
+            font-weight: 600;
+            padding: 10px 20px;
+            background: transparent !important;
+        }
+
+        .nav-tabs-custom > li.active > a {
+            color: #1e3c72 !important;
+            border-bottom: 3px solid #3498db !important;
+        }
+
+    /* Contenedor de Foto */
+    .photo-container {
+        border: 1px solid #eee;
+        padding: 20px;
+        text-align: center;
+        border-radius: 4px;
+        width: 250px;
+        float: right;
+        background: #fafafa;
+    }
+
+    .photo-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #444;
+        margin-bottom: 15px;
+    }
+
+    .img-profile {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 15px;
+    }
+
+    .btn-upload {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 12px;
+        transition: 0.3s;
+    }
+
+        .btn-upload:hover {
+            background-color: #2980b9;
+        }
+
+    .tab-content {
+        padding: 10px 0;
+    }
+
+    .section-title {
+        color: #1e3c72;
+        font-weight: bold;
+        border-left: 4px solid #3498db;
+        padding-left: 10px;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        font-size: 14px;
+    }
+</style>
+
+<div class="container">
+    <div class="main-card">
+        @using (Html.BeginForm("Create", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-md-7">
+                    <h2 style="color: #1e3c72; margin-top:0; font-weight:bold;">Registro de Personal</h2>
+                    <p class="text-muted">Complete la información detallada para el alta en el sistema.</p>
+                    <br />
+                    <div class="row form-group">
+                        <div class="col-md-4"><label class="form-label">ID Empleado / Código:</label></div>
+                        <div class="col-md-8">@Html.TextBoxFor(m => m.PEEEMP_CODIGO, new { @class = "form-control form-control-custom", placeholder = "Ej: L00384606" })</div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-4"><label class="form-label">Nombres Completos:</label></div>
+                        <div class="col-md-8">@Html.TextBoxFor(m => m.PEEEMP_NOMBRES, new { @class = "form-control form-control-custom" })</div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-4"><label class="form-label">Apellidos Completos:</label></div>
+                        <div class="col-md-8">@Html.TextBoxFor(m => m.PEEEMP_APELLIDOS, new { @class = "form-control form-control-custom" })</div>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="photo-container">
+                        <div class="photo-title">Imagen de Perfil</div>
+                        <img id="imgPreview" src="/Uploads/Fotos/default.png" class="img-profile" />
+                        <br />
+                        <label class="btn-upload" style="cursor:pointer;">
+                            <i class="glyphicon glyphicon-camera"></i> SELECCIONAR FOTO
+                            <input type="file" name="fotoFile" id="fotoInput" style="display:none;" accept="image/*" onchange="previewImage(this)" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="nav nav-tabs nav-tabs-custom">
+                <li class="active"><a data-toggle="tab" href="#cuenta"><i class="glyphicon glyphicon-lock"></i> Cuenta y Rol</a></li>
+                <li><a data-toggle="tab" href="#personal"><i class="glyphicon glyphicon-user"></i> Demográficos</a></li>
+                <li><a data-toggle="tab" href="#contacto"><i class="glyphicon glyphicon-envelope"></i> Contacto y Ubicación</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="cuenta" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Rol de Usuario (Permisos): *</label>
+                                @Html.DropDownList("XEPER_CODIGO", null, "Seleccione un perfil...", new { @class = "form-control form-control-custom" })
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contraseña de Acceso:</label>
+                                @Html.PasswordFor(m => m.XEUSU_PASWD, new { @class = "form-control form-control-custom", placeholder = "Ingrese clave segura" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Estado de Cuenta:</label>
+                                <select name="XEEST_CODIGO" class="form-control form-control-custom">
+                                    <option value="1">Activo</option>
+                                    <option value="0">Inactivo</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Pie de Firma (Cargo/Departamento):</label>
+                                @Html.TextBoxFor(m => m.XEUSU_PIEFIR, new { @class = "form-control form-control-custom", placeholder = "Ej: Departamento de IT" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="personal" class="tab-pane fade">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label">Cédula de Identidad:</label>
+                                @Html.TextBoxFor(m => m.PEEEMP_CEDULA, new { @class = "form-control form-control-custom" })
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Género / Sexo:</label>
+                                @Html.DropDownList("PEPSEX_CODIGO", null, "Seleccione...", new { @class = "form-control form-control-custom" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label">Fecha de Nacimiento:</label>
+                                @Html.TextBoxFor(m => m.PEEEMP_FECHANAC, "{0:yyyy-MM-dd}", new { @class = "form-control form-control-custom", type = "date" })
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Estado Civil:</label>
+                                @Html.DropDownList("PEESC_CODIGO", null, "Seleccione...", new { @class = "form-control form-control-custom" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label">Cargas Familiares (Hijos):</label>
+                                @Html.TextBoxFor(m => m.PEEEMP_HIJOS, new { @class = "form-control form-control-custom", type = "number", min = "0" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="contacto" class="tab-pane fade">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Correo Electrónico Institucional:</label>
+                                @Html.TextBoxFor(m => m.PEEEMP_EMAIL, new { @class = "form-control form-control-custom", type = "email", placeholder = "ejemplo@monster.edu" })
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Dirección Domiciliaria:</label>
+                                @Html.TextAreaFor(m => m.PEEEMP_DIRECCION, new { @class = "form-control form-control-custom", rows = "3", style = "height:auto;" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Teléfono Convencional:</label>
+                                @Html.TextBoxFor(m => m.PEEEMP_TELEFONO, new { @class = "form-control form-control-custom" })
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Celular / WhatsApp:</label>
+                                @Html.TextBoxFor(m => m.PEEEMP_CELULAR, new { @class = "form-control form-control-custom" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr style="margin-top: 30px;" />
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <a href="@Url.Action("Index")" class="btn btn-default" style="padding: 10px 25px;">Cancelar</a>
+                    <button type="submit" class="btn btn-primary" style="background:#1e3c72; border:none; padding: 10px 40px; font-weight:bold;">
+                        <i class="glyphicon glyphicon-floppy-disk"></i> REGISTRAR USUARIO
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('imgPreview').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="347fde3f33444d3a820abb6bc1f8db09" Name="Diagram1">
+        <EntityTypeShape EntityType="monster_universityModel.PEEEMP_EMPLE" Width="1.5" PointX="3" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="monster_universityModel.PEESC_ESTCIV" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="monster_universityModel.PESEX_SEXO" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="monster_universityModel.XEOPC_OPCIO" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="monster_universityModel.XEPER_PERFI" Width="1.5" PointX="5.25" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="monster_universityModel.XEUSU_USUAR" Width="1.5" PointX="5.25" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="monster_universityModel.XEUXP_USUPE" Width="1.5" PointX="7.5" PointY="3.5" IsExpanded="true" />
+        <AssociationConnector Association="monster_universityModel.FK__PEEEMP_EM__PEESC__5441852A" ManuallyRouted="false" />
+        <AssociationConnector Association="monster_universityModel.FK__PEEEMP_EM__PEPSE__534D60F1" ManuallyRouted="false" />
+        <AssociationConnector Association="monster_universityModel.FK__XEUSU_USU__PEEEM__59063A47" ManuallyRouted="false" />
+        <AssociationConnector Association="monster_universityModel.FK__XEUXP_USU__XEPER__60A75C0F" ManuallyRouted="false" />
+        <AssociationConnector Association="monster_universityModel.FK_XR_XEUSU_XEUXP" ManuallyRouted="false" />
+        <AssociationConnector Association="monster_universityModel.XEOXP_OPCPE" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

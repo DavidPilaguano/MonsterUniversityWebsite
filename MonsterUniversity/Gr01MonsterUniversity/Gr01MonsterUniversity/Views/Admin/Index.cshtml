@@ -1,0 +1,241 @@
+﻿@model IEnumerable<Gr01MonsterUniversity.Models.XEUSU_USUAR>
+
+@{
+    ViewBag.Title = "Gestión de Usuarios y Accesos";
+}
+
+<style>
+    body {
+        background-color: #f4f7f9;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .monster-container {
+        margin-top: 20px;
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        overflow: hidden;
+        border: 1px solid #e0e6ed;
+    }
+
+    .page-header-custom {
+        margin-bottom: 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .search-input {
+        padding: 12px 20px 12px 40px;
+        border-radius: 25px;
+        border: 1px solid #ddd;
+        width: 100%;
+        max-width: 400px;
+        transition: 0.3s;
+    }
+
+    .monster-table thead th {
+        background-color: #1e3c72;
+        color: white;
+        text-transform: uppercase;
+        font-size: 11px;
+        padding: 15px !important;
+        border: none;
+    }
+
+    .user-img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #1e3c72;
+    }
+
+    .role-badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+    /* Colores por rol */
+    .badge-admin {
+        background: #e74c3c;
+        color: white;
+    }
+
+    .badge-docente {
+        background: #3498db;
+        color: white;
+    }
+
+    .badge-estudiante {
+        background: #2ecc71;
+        color: white;
+    }
+</style>
+
+<div class="container-fluid" style="padding: 20px 40px;">
+
+    <div class="page-header-custom">
+        <div>
+            <h2 style="color: #1e3c72; font-weight:bold; margin:0;">
+                <i class="glyphicon glyphicon-user"></i> Control de Usuarios y Seguridad
+            </h2>
+            <p class="text-muted">Gestión de credenciales, perfiles y permisos del sistema.</p>
+        </div>
+        <div class="btn-group">
+            <a href="@Url.Action("Index", "Admin")" class="btn btn-default" style="padding: 12px 20px; border-radius: 8px; font-weight:bold; margin-right:5px;">
+                <i class="glyphicon glyphicon-lock"></i> GESTIONAR ROLES
+            </a>
+            <a href="@Url.Action("Create")" class="btn btn-primary" style="background:#1e3c72; border:none; padding: 12px 25px; border-radius: 8px; font-weight:bold;">
+                <i class="glyphicon glyphicon-plus"></i> NUEVO USUARIO
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="search-wrapper" style="position:relative;">
+                <i class="glyphicon glyphicon-search" style="position:absolute; left:15px; top:13px; color:#999;"></i>
+                <input type="text" id="txtSearch" class="search-input" placeholder="Buscar por nombre, usuario o rol..." />
+            </div>
+        </div>
+    </div>
+
+    <div class="monster-container">
+        <div class="table-responsive">
+            <table class="table monster-table" id="tablaUsuarios">
+                <thead>
+                    <tr>
+                        <th width="60">Foto</th>
+                        <th width="120">Usuario</th>
+                        <th>Nombre del Personal</th>
+                        <th>Rol / Perfil</th>
+                        <th>Estado</th>
+                        <th class="text-center" width="180">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @{
+                                    var fotoPath = (item.PEEEMP_EMPLE != null && !string.IsNullOrEmpty(item.PEEEMP_EMPLE.PEEMP_FOTO))
+                                                   ? item.PEEEMP_EMPLE.PEEMP_FOTO : "/Uploads/Fotos/default.png";
+                                }
+                                <img src="@Url.Content("~" + fotoPath)" class="user-img" onerror="this.src='@Url.Content("~/Uploads/Fotos/default.png")'" />
+                            </td>
+                            <td><strong class="text-primary">@item.PEEEMP_CODIGO</strong></td>
+                            <td>
+                                @if (item.PEEEMP_EMPLE != null)
+                                {
+                                    <span>@item.PEEEMP_EMPLE.PEEEMP_NOMBRES @item.PEEEMP_EMPLE.PEEEMP_APELLIDOS</span><br />
+                                    <small class="text-muted">@item.PEEEMP_EMPLE.PEEEMP_EMAIL</small>
+                                }
+                            </td>
+                            <td>
+                                @if (item.XEUXP_USUPE != null && item.XEUXP_USUPE.Any())
+                                {
+                                    var rol = item.XEUXP_USUPE.First().XEPER_PERFI.XEPER_DESCRI;
+                                    var claseBadge = rol.Contains("ADMIN") ? "badge-admin" : (rol.Contains("DOC") ? "badge-docente" : "badge-estudiante");
+                                    <span class="role-badge @claseBadge">@rol</span>
+                                }
+                                else
+                                {
+                                    <span class="role-badge" style="background:#bdc3c7;">SIN ROL</span>
+                                }
+                            </td>
+                            <td>
+                                <span class="label @(item.XEEST_CODIGO == "1" ? "label-success" : "label-danger")">
+                                    @(item.XEEST_CODIGO == "1" ? "ACTIVO" : "INACTIVO")
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                @* --- Solo se mantienen Ficha, Editar y Eliminar --- *@
+
+                                <button type="button" class="btn btn-info btn-sm" onclick="verReportePopup('@item.PEEEMP_CODIGO')" title="Ficha PDF">
+                                    <i class="glyphicon glyphicon-file"></i>
+                                </button>
+
+                                <a href="@Url.Action("Edit", new { id = item.PEEEMP_CODIGO })" class="btn btn-warning btn-sm" title="Editar Usuario">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </a>
+
+                                <button class="btn btn-danger btn-sm btn-eliminar" data-id="@item.PEEEMP_CODIGO" title="Eliminar">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 15px 25px; border-top: 1px solid #e0e6ed; color: #7f8c8d; font-size: 13px;">
+            <i class="glyphicon glyphicon-info-sign"></i> <strong>@Model.Count()</strong> Usuarios registrados en el sistema.
+        </div>
+    </div>
+</div>
+
+@* Modal para PDF *@
+<div class="modal fade" id="modalPDF" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document" style="width: 85%;">
+        <div class="modal-content" style="border-radius: 12px; overflow: hidden;">
+            <div class="modal-header" style="background-color: #1e3c72; color: white;">
+                <button type="button" class="close" data-dismiss="modal" style="color:white; opacity:1;">&times;</button>
+                <h4 class="modal-title"><i class="glyphicon glyphicon-file"></i> Previsualización de Ficha</h4>
+            </div>
+            <div class="modal-body" style="padding: 0; height: 75vh;">
+                <iframe id="iframePDF" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            // Buscador
+            $("#txtSearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#tablaUsuarios tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+        function verReportePopup(id) {
+            var url = '@Url.Action("VerReportePDF", "Admin")' + '?id=' + id;
+            $('#iframePDF').attr('src', url);
+            $('#modalPDF').modal('show');
+        }
+
+        $(document).on("click", ".btn-eliminar", function () {
+            var idUsuario = $(this).data("id");
+            var fila = $(this).closest("tr");
+
+            Swal.fire({
+                title: '¿Eliminar usuario?',
+                text: "Esta acción desactivará al usuario " + idUsuario,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post("@Url.Action("Delete", "Admin")", { id: idUsuario }, function (data) {
+                        if (data.success) {
+                            Swal.fire('Eliminado', data.message, 'success');
+                            fila.fadeOut();
+                        } else {
+                            Swal.fire('Error', data.message, 'error');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

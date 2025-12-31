@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="monster_universityModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="PEEEMP_EMPLE">
+    <Key>
+      <PropertyRef Name="PEEEMP_CODIGO" />
+    </Key>
+    <Property Name="PEEEMP_CODIGO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PEEEMP_CEDULA" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PEEEMP_NOMBRES" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="PEEEMP_APELLIDOS" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="PEEEMP_EMAIL" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="PEEEMP_FECHANAC" Type="DateTime" Precision="0" />
+    <Property Name="PEEEMP_DIRECCION" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="PEEEMP_TELEFONO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PEEEMP_CELULAR" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PEEEMP_HIJOS" Type="Int32" />
+    <Property Name="PEPSEX_CODIGO" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="PEESC_CODIGO" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="PEEMP_FOTO" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PEESC_ESTCIV" Relationship="Self.FK__PEEEMP_EM__PEESC__5441852A" FromRole="PEEEMP_EMPLE" ToRole="PEESC_ESTCIV" />
+    <NavigationProperty Name="PESEX_SEXO" Relationship="Self.FK__PEEEMP_EM__PEPSE__534D60F1" FromRole="PEEEMP_EMPLE" ToRole="PESEX_SEXO" />
+    <NavigationProperty Name="XEUSU_USUAR" Relationship="Self.FK__XEUSU_USU__PEEEM__59063A47" FromRole="PEEEMP_EMPLE" ToRole="XEUSU_USUAR" />
+  </EntityType>
+  <EntityType Name="PEESC_ESTCIV">
+    <Key>
+      <PropertyRef Name="PEESC_CODIGO" />
+    </Key>
+    <Property Name="PEESC_CODIGO" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PEESC_DESCRI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PEEEMP_EMPLE" Relationship="Self.FK__PEEEMP_EM__PEESC__5441852A" FromRole="PEESC_ESTCIV" ToRole="PEEEMP_EMPLE" />
+  </EntityType>
+  <EntityType Name="PESEX_SEXO">
+    <Key>
+      <PropertyRef Name="PEPSEX_CODIGO" />
+    </Key>
+    <Property Name="PEPSEX_CODIGO" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PEPSEX_DESCRI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PEEEMP_EMPLE" Relationship="Self.FK__PEEEMP_EM__PEPSE__534D60F1" FromRole="PESEX_SEXO" ToRole="PEEEMP_EMPLE" />
+  </EntityType>
+  <EntityType Name="XEOPC_OPCIO">
+    <Key>
+      <PropertyRef Name="XEOPC_CODIGO" />
+    </Key>
+    <Property Name="XEOPC_CODIGO" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="XEOPC_DESCRI" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="XEOPC_URL" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="XEPER_PERFI" Relationship="Self.XEOXP_OPCPE" FromRole="XEOPC_OPCIO" ToRole="XEPER_PERFI" />
+  </EntityType>
+  <EntityType Name="XEPER_PERFI">
+    <Key>
+      <PropertyRef Name="XEPER_CODIGO" />
+    </Key>
+    <Property Name="XEPER_CODIGO" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="XEPER_DESCRI" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="XEUXP_USUPE" Relationship="Self.FK__XEUXP_USU__XEPER__60A75C0F" FromRole="XEPER_PERFI" ToRole="XEUXP_USUPE" />
+    <NavigationProperty Name="XEOPC_OPCIO" Relationship="Self.XEOXP_OPCPE" FromRole="XEPER_PERFI" ToRole="XEOPC_OPCIO" />
+  </EntityType>
+  <EntityType Name="XEUSU_USUAR">
+    <Key>
+      <PropertyRef Name="PEEEMP_CODIGO" />
+      <PropertyRef Name="XEUSU_PASWD" />
+    </Key>
+    <Property Name="PEEEMP_CODIGO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="XEUSU_PASWD" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="XEEST_CODIGO" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="XEUSU_PIEFIR" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="XEUSU_FECCRE" Type="DateTime" Precision="3" />
+    <Property Name="XEUSU_FECMOD" Type="DateTime" Precision="3" />
+    <Property Name="XEUSU_REQ_CAMBIO" Type="Byte" />
+    <NavigationProperty Name="PEEEMP_EMPLE" Relationship="Self.FK__XEUSU_USU__PEEEM__59063A47" FromRole="XEUSU_USUAR" ToRole="PEEEMP_EMPLE" />
+    <NavigationProperty Name="XEUXP_USUPE" Relationship="Self.FK_XR_XEUSU_XEUXP" FromRole="XEUSU_USUAR" ToRole="XEUXP_USUPE" />
+  </EntityType>
+  <EntityType Name="XEUXP_USUPE">
+    <Key>
+      <PropertyRef Name="PEEEMP_CODIGO" />
+      <PropertyRef Name="XEUSU_PASWD" />
+      <PropertyRef Name="XEPER_CODIGO" />
+    </Key>
+    <Property Name="PEEEMP_CODIGO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="XEUSU_PASWD" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="XEPER_CODIGO" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="XEUXP_FECASI" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="XEPER_PERFI" Relationship="Self.FK__XEUXP_USU__XEPER__60A75C0F" FromRole="XEUXP_USUPE" ToRole="XEPER_PERFI" />
+    <NavigationProperty Name="XEUSU_USUAR" Relationship="Self.FK_XR_XEUSU_XEUXP" FromRole="XEUXP_USUPE" ToRole="XEUSU_USUAR" />
+  </EntityType>
+  <Association Name="FK__PEEEMP_EM__PEESC__5441852A">
+    <End Role="PEESC_ESTCIV" Type="Self.PEESC_ESTCIV" Multiplicity="0..1" />
+    <End Role="PEEEMP_EMPLE" Type="Self.PEEEMP_EMPLE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PEESC_ESTCIV">
+        <PropertyRef Name="PEESC_CODIGO" />
+      </Principal>
+      <Dependent Role="PEEEMP_EMPLE">
+        <PropertyRef Name="PEESC_CODIGO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PEEEMP_EM__PEPSE__534D60F1">
+    <End Role="PESEX_SEXO" Type="Self.PESEX_SEXO" Multiplicity="0..1" />
+    <End Role="PEEEMP_EMPLE" Type="Self.PEEEMP_EMPLE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PESEX_SEXO">
+        <PropertyRef Name="PEPSEX_CODIGO" />
+      </Principal>
+      <Dependent Role="PEEEMP_EMPLE">
+        <PropertyRef Name="PEPSEX_CODIGO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__XEUSU_USU__PEEEM__59063A47">
+    <End Role="PEEEMP_EMPLE" Type="Self.PEEEMP_EMPLE" Multiplicity="1" />
+    <End Role="XEUSU_USUAR" Type="Self.XEUSU_USUAR" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PEEEMP_EMPLE">
+        <PropertyRef Name="PEEEMP_CODIGO" />
+      </Principal>
+      <Dependent Role="XEUSU_USUAR">
+        <PropertyRef Name="PEEEMP_CODIGO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__XEUXP_USU__XEPER__60A75C0F">
+    <End Role="XEPER_PERFI" Type="Self.XEPER_PERFI" Multiplicity="1" />
+    <End Role="XEUXP_USUPE" Type="Self.XEUXP_USUPE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="XEPER_PERFI">
+        <PropertyRef Name="XEPER_CODIGO" />
+      </Principal>
+      <Dependent Role="XEUXP_USUPE">
+        <PropertyRef Name="XEPER_CODIGO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_XR_XEUSU_XEUXP">
+    <End Role="XEUSU_USUAR" Type="Self.XEUSU_USUAR" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="XEUXP_USUPE" Type="Self.XEUXP_USUPE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="XEUSU_USUAR">
+        <PropertyRef Name="PEEEMP_CODIGO" />
+        <PropertyRef Name="XEUSU_PASWD" />
+      </Principal>
+      <Dependent Role="XEUXP_USUPE">
+        <PropertyRef Name="PEEEMP_CODIGO" />
+        <PropertyRef Name="XEUSU_PASWD" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="XEOXP_OPCPE">
+    <End Role="XEOPC_OPCIO" Type="Self.XEOPC_OPCIO" Multiplicity="*" />
+    <End Role="XEPER_PERFI" Type="Self.XEPER_PERFI" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="monster_universityEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="PEEEMP_EMPLE" EntityType="Self.PEEEMP_EMPLE" />
+    <EntitySet Name="PEESC_ESTCIV" EntityType="Self.PEESC_ESTCIV" />
+    <EntitySet Name="PESEX_SEXO" EntityType="Self.PESEX_SEXO" />
+    <EntitySet Name="XEOPC_OPCIO" EntityType="Self.XEOPC_OPCIO" />
+    <EntitySet Name="XEPER_PERFI" EntityType="Self.XEPER_PERFI" />
+    <EntitySet Name="XEUSU_USUAR" EntityType="Self.XEUSU_USUAR" />
+    <EntitySet Name="XEUXP_USUPE" EntityType="Self.XEUXP_USUPE" />
+    <AssociationSet Name="FK__PEEEMP_EM__PEESC__5441852A" Association="Self.FK__PEEEMP_EM__PEESC__5441852A">
+      <End Role="PEESC_ESTCIV" EntitySet="PEESC_ESTCIV" />
+      <End Role="PEEEMP_EMPLE" EntitySet="PEEEMP_EMPLE" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PEEEMP_EM__PEPSE__534D60F1" Association="Self.FK__PEEEMP_EM__PEPSE__534D60F1">
+      <End Role="PESEX_SEXO" EntitySet="PESEX_SEXO" />
+      <End Role="PEEEMP_EMPLE" EntitySet="PEEEMP_EMPLE" />
+    </AssociationSet>
+    <AssociationSet Name="FK__XEUSU_USU__PEEEM__59063A47" Association="Self.FK__XEUSU_USU__PEEEM__59063A47">
+      <End Role="PEEEMP_EMPLE" EntitySet="PEEEMP_EMPLE" />
+      <End Role="XEUSU_USUAR" EntitySet="XEUSU_USUAR" />
+    </AssociationSet>
+    <AssociationSet Name="FK__XEUXP_USU__XEPER__60A75C0F" Association="Self.FK__XEUXP_USU__XEPER__60A75C0F">
+      <End Role="XEPER_PERFI" EntitySet="XEPER_PERFI" />
+      <End Role="XEUXP_USUPE" EntitySet="XEUXP_USUPE" />
+    </AssociationSet>
+    <AssociationSet Name="FK_XR_XEUSU_XEUXP" Association="Self.FK_XR_XEUSU_XEUXP">
+      <End Role="XEUSU_USUAR" EntitySet="XEUSU_USUAR" />
+      <End Role="XEUXP_USUPE" EntitySet="XEUXP_USUPE" />
+    </AssociationSet>
+    <AssociationSet Name="XEOXP_OPCPE" Association="Self.XEOXP_OPCPE">
+      <End Role="XEOPC_OPCIO" EntitySet="XEOPC_OPCIO" />
+      <End Role="XEPER_PERFI" EntitySet="XEPER_PERFI" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

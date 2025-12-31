@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="monster_universityModelStoreContainer" CdmEntityContainer="monster_universityEntities">
+    <EntitySetMapping Name="PEEEMP_EMPLE">
+      <EntityTypeMapping TypeName="monster_universityModel.PEEEMP_EMPLE">
+        <MappingFragment StoreEntitySet="PEEEMP_EMPLE">
+          <ScalarProperty Name="PEEEMP_CODIGO" ColumnName="PEEEMP_CODIGO" />
+          <ScalarProperty Name="PEEEMP_CEDULA" ColumnName="PEEEMP_CEDULA" />
+          <ScalarProperty Name="PEEEMP_NOMBRES" ColumnName="PEEEMP_NOMBRES" />
+          <ScalarProperty Name="PEEEMP_APELLIDOS" ColumnName="PEEEMP_APELLIDOS" />
+          <ScalarProperty Name="PEEEMP_EMAIL" ColumnName="PEEEMP_EMAIL" />
+          <ScalarProperty Name="PEEEMP_FECHANAC" ColumnName="PEEEMP_FECHANAC" />
+          <ScalarProperty Name="PEEEMP_DIRECCION" ColumnName="PEEEMP_DIRECCION" />
+          <ScalarProperty Name="PEEEMP_TELEFONO" ColumnName="PEEEMP_TELEFONO" />
+          <ScalarProperty Name="PEEEMP_CELULAR" ColumnName="PEEEMP_CELULAR" />
+          <ScalarProperty Name="PEEEMP_HIJOS" ColumnName="PEEEMP_HIJOS" />
+          <ScalarProperty Name="PEPSEX_CODIGO" ColumnName="PEPSEX_CODIGO" />
+          <ScalarProperty Name="PEESC_CODIGO" ColumnName="PEESC_CODIGO" />
+          <ScalarProperty Name="PEEMP_FOTO" ColumnName="PEEMP_FOTO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PEESC_ESTCIV">
+      <EntityTypeMapping TypeName="monster_universityModel.PEESC_ESTCIV">
+        <MappingFragment StoreEntitySet="PEESC_ESTCIV">
+          <ScalarProperty Name="PEESC_CODIGO" ColumnName="PEESC_CODIGO" />
+          <ScalarProperty Name="PEESC_DESCRI" ColumnName="PEESC_DESCRI" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PESEX_SEXO">
+      <EntityTypeMapping TypeName="monster_universityModel.PESEX_SEXO">
+        <MappingFragment StoreEntitySet="PESEX_SEXO">
+          <ScalarProperty Name="PEPSEX_CODIGO" ColumnName="PEPSEX_CODIGO" />
+          <ScalarProperty Name="PEPSEX_DESCRI" ColumnName="PEPSEX_DESCRI" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="XEOPC_OPCIO">
+      <EntityTypeMapping TypeName="monster_universityModel.XEOPC_OPCIO">
+        <MappingFragment StoreEntitySet="XEOPC_OPCIO">
+          <ScalarProperty Name="XEOPC_CODIGO" ColumnName="XEOPC_CODIGO" />
+          <ScalarProperty Name="XEOPC_DESCRI" ColumnName="XEOPC_DESCRI" />
+          <ScalarProperty Name="XEOPC_URL" ColumnName="XEOPC_URL" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="XEPER_PERFI">
+      <EntityTypeMapping TypeName="monster_universityModel.XEPER_PERFI">
+        <MappingFragment StoreEntitySet="XEPER_PERFI">
+          <ScalarProperty Name="XEPER_CODIGO" ColumnName="XEPER_CODIGO" />
+          <ScalarProperty Name="XEPER_DESCRI" ColumnName="XEPER_DESCRI" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="XEUSU_USUAR">
+      <EntityTypeMapping TypeName="monster_universityModel.XEUSU_USUAR">
+        <MappingFragment StoreEntitySet="XEUSU_USUAR">
+          <ScalarProperty Name="PEEEMP_CODIGO" ColumnName="PEEEMP_CODIGO" />
+          <ScalarProperty Name="XEUSU_PASWD" ColumnName="XEUSU_PASWD" />
+          <ScalarProperty Name="XEEST_CODIGO" ColumnName="XEEST_CODIGO" />
+          <ScalarProperty Name="XEUSU_PIEFIR" ColumnName="XEUSU_PIEFIR" />
+          <ScalarProperty Name="XEUSU_FECCRE" ColumnName="XEUSU_FECCRE" />
+          <ScalarProperty Name="XEUSU_FECMOD" ColumnName="XEUSU_FECMOD" />
+          <ScalarProperty Name="XEUSU_REQ_CAMBIO" ColumnName="XEUSU_REQ_CAMBIO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="XEUXP_USUPE">
+      <EntityTypeMapping TypeName="monster_universityModel.XEUXP_USUPE">
+        <MappingFragment StoreEntitySet="XEUXP_USUPE">
+          <ScalarProperty Name="PEEEMP_CODIGO" ColumnName="PEEEMP_CODIGO" />
+          <ScalarProperty Name="XEUSU_PASWD" ColumnName="XEUSU_PASWD" />
+          <ScalarProperty Name="XEPER_CODIGO" ColumnName="XEPER_CODIGO" />
+          <ScalarProperty Name="XEUXP_FECASI" ColumnName="XEUXP_FECASI" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="XEOXP_OPCPE" TypeName="monster_universityModel.XEOXP_OPCPE" StoreEntitySet="XEOXP_OPCPE">
+      <EndProperty Name="XEOPC_OPCIO">
+        <ScalarProperty Name="XEOPC_CODIGO" ColumnName="XEOPC_CODIGO" />
+      </EndProperty>
+      <EndProperty Name="XEPER_PERFI">
+        <ScalarProperty Name="XEPER_CODIGO" ColumnName="XEPER_CODIGO" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

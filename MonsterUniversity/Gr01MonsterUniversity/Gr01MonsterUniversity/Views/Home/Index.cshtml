@@ -1,0 +1,206 @@
+﻿@{
+    ViewBag.Title = "Inicio - Monster University";
+}
+
+<style>
+    /* Fondo general para que el contenido resalte */
+    body {
+        background-color: #f0f2f5;
+    }
+
+    /* Contenedor principal más ancho */
+    .main-dashboard {
+        padding: 30px 50px; /* Más espacio a los lados */
+    }
+
+    /* Welcome Card Expandida */
+    .welcome-card {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        padding: 60px 40px; /* Más alto */
+        border-radius: 20px;
+        margin-bottom: 35px;
+        box-shadow: 0 10px 30px rgba(30,60,114,0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+        /* Efecto de círculo de fondo para que no se vea plano */
+        .welcome-card::after {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+
+    .profile-img-home {
+        width: 160px; /* Más grande */
+        height: 160px;
+        border: 6px solid rgba(255,255,255,0.2);
+        border-radius: 50%;
+        object-fit: cover;
+        background-color: #fff;
+        display: block;
+        margin: 0 auto 25px auto;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        transition: 0.3s;
+    }
+
+        .profile-img-home:hover {
+            transform: scale(1.05);
+        }
+
+    .status-badge {
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(5px);
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-size: 0.9em;
+        margin: 0 8px;
+        border: 1px solid rgba(255,255,255,0.3);
+        display: inline-block;
+    }
+
+    /* Caja de Gráfico Grande */
+    .chart-container-box {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        border: 1px solid #e0e6ed;
+        margin-bottom: 50px;
+    }
+
+    /* Mini tarjetas de estadísticas */
+    .stat-mini-card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        margin-bottom: 20px;
+        border-left: 5px solid #1e3c72;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+</style>
+
+<main class="main-dashboard">
+    <section class="welcome-card text-center">
+        @if (Session["UserRole"] != null)
+        {
+            var fotoSesion = Session["UserFoto"]?.ToString();
+            var rutaLimpia = string.IsNullOrEmpty(fotoSesion)
+                             ? "/Uploads/Fotos/default.png"
+                             : fotoSesion.Replace("~", "");
+
+            <img src="@Url.Content("~" + rutaLimpia)"
+                 class="profile-img-home"
+                 alt="Foto Perfil"
+                 onerror="this.onerror=null;this.src='@Url.Content("~/Uploads/Fotos/default.png")';" />
+
+            <h1 style="font-size: 3em; font-weight: 800; margin-bottom: 10px;">¡Bienvenido, @Session["UserName"]!</h1>
+            <p class="lead" style="font-size: 1.5em; opacity: 0.9;">Panel de Gestión - Monster University</p>
+
+            <div class="mt-4">
+                <span class="status-badge"><i class="glyphicon glyphicon-briefcase"></i> <strong>Rol:</strong> @Session["UserRole"]</span>
+                <span class="status-badge"><i class="glyphicon glyphicon-time"></i> <strong>Acceso:</strong> @DateTime.Now.ToString("dd MMM yyyy")</span>
+                <span class="status-badge" style="background: #27ae60;"><i class="glyphicon glyphicon-ok-sign"></i> En Línea</span>
+            </div>
+        }
+        else
+        {
+            <h1 style="font-size: 3.5em;">Bienvenido al Sistema</h1>
+            <p class="lead">Por favor, inicie sesión para acceder a los módulos académicos.</p>
+            //<a href="@Url.Action("Login", "Login")" class="btn btn-default btn-lg" style="border-radius:25px; padding:10px 40px;">Iniciar Sesión</a>
+        }
+    </section>
+
+    @if (Session["UserRole"]?.ToString() == "ADMINISTRADOR")
+    {
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-md-4">
+                        <div class="stat-mini-card">
+                            <h4 class="text-muted">Total Usuarios</h4>
+                            <h2 style="color:#1e3c72; font-weight:bold;">@((ViewBag.Valores as int[])?.Sum() ?? 0)</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-mini-card" style="border-left-color: #f39c12;">
+                            <h4 class="text-muted">Estado Sistema</h4>
+                            <h2 style="color:#f39c12; font-weight:bold;">Óptimo</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-mini-card" style="border-left-color: #27ae60;">
+                            <h4 class="text-muted">Reportes Hoy</h4>
+                            <h2 style="color:#27ae60; font-weight:bold;">Disponible</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container-box">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="margin:0; color:#1e3c72; font-weight:bold;">
+                            <i class="glyphicon glyphicon-stats"></i> Distribución de Usuarios por Rol
+                        </h3>
+                        <span class="label label-primary">Actualizado en tiempo real</span>
+                    </div>
+                    <hr />
+                    <div style="height: 450px;">
+                        <canvas id="graficoInicio"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const ctx = document.getElementById('graficoInicio').getContext('2d');
+
+                const labels = @Html.Raw(Json.Encode(ViewBag.Labels ?? new string[] { "Sin Datos" }));
+                const valores = @Html.Raw(Json.Encode(ViewBag.Valores ?? new int[] { 0 }));
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Usuarios Registrados',
+                            data: valores,
+                            backgroundColor: 'rgba(30, 60, 114, 0.8)',
+                            borderColor: '#1e3c72',
+                            borderWidth: 2,
+                            borderRadius: 10,
+                            barThickness: 60
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: '#f0f0f0' },
+                                ticks: { font: { size: 14 } }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: 14, weight: 'bold' } }
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+    }
+</main>

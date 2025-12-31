@@ -1,0 +1,159 @@
+﻿@model IEnumerable<Gr01MonsterUniversity.Models.XEPER_PERFI>
+
+@{
+    ViewBag.Title = "Seguridad de Módulos";
+}
+
+<style>
+    .split-container {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .perfiles-sidebar {
+        flex: 0 0 300px;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        overflow: hidden;
+    }
+
+    .opciones-panel {
+        flex: 1;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        padding: 25px;
+    }
+
+    .list-group-item {
+        cursor: pointer;
+        border-left: 4px solid transparent;
+        transition: 0.3s;
+    }
+
+        .list-group-item.active {
+            background: #e9ecef !important;
+            color: #1e3c72;
+            border-left: 4px solid #1e3c72;
+            font-weight: bold;
+        }
+
+    .modulo-item {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        border-bottom: 1px solid #f1f1f1;
+    }
+
+        .modulo-item input {
+            width: 18px;
+            height: 18px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #eee;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="page-header">
+        <h2 style="color: #1e3c72; font-weight:bold;"><i class="fas fa-shield-alt"></i> Gestión de Accesos por Perfil</h2>
+    </div>
+
+    <div class="split-container">
+        <div class="perfiles-sidebar">
+            <div style="padding: 15px; background: #f4f7f9; border-bottom: 1px solid #ddd; font-weight: bold;">Perfiles de Sistema</div>
+            <div class="list-group" id="listaPerfiles">
+                @foreach (var perfil in Model)
+                {
+                    <a href="javascript:void(0)" class="list-group-item" onclick="cargarOpciones('@perfil.XEPER_CODIGO.ToString().Trim()', this)">
+                        <i class="fas fa-user-shield"></i> @perfil.XEPER_DESCRI
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="opciones-panel">
+            <div class="panel-header">
+                <h4 id="nombrePerfilSeleccionado">Seleccione un perfil de la izquierda</h4>
+                <button id="btnGuardar" class="btn btn-success" style="display:none;" onclick="guardarCambios()">
+                    <i class="fas fa-save"></i> Guardar Cambios
+                </button>
+            </div>
+
+            <div id="contenedorOpciones">
+                <p class="text-center text-muted" style="padding: 50px;">Esperando selección...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        let perfilIdActual = "";
+
+        function cargarOpciones(id, elemento) {
+            perfilIdActual = id;
+            $(".list-group-item").removeClass("active");
+            $(elemento).addClass("active");
+            $("#btnGuardar").fadeIn();
+
+            $.post("@Url.Action("ObtenerEstructuraPermisos", "Admin")", { idPerfil: id }, function (data) {
+                if(data) {
+                    $("#nombrePerfilSeleccionado").html("Accesos para: <b>" + data.NombrePerfil + "</b>");
+                    let html = "";
+                    data.Opciones.forEach(opt => {
+                        html += `
+                            <div class="modulo-item">
+                                <input type="checkbox" class="chk-permiso" value="${opt.CodigoOpcion}" ${opt.Asignada ? 'checked' : ''}>
+                                <span><i class="fas fa-folder"></i> ${opt.Descripcion} <small class="text-muted">(${opt.CodigoOpcion})</small></span>
+                            </div>`;
+                    });
+                    $("#contenedorOpciones").html(html);
+                }
+            });
+        }
+
+        function guardarCambios() {
+            let seleccionados = [];
+            $(".chk-permiso:checked").each(function() {
+                seleccionados.push($(this).val());
+            });
+
+            // Bloquear botón para evitar doble clic
+            $("#btnGuardar").prop("disabled", true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
+
+            $.post("@Url.Action("GuardarPermisosModulos", "Admin")", {
+                CodigoPerfil: perfilIdActual,
+                opcionesSeleccionadas: seleccionados
+            }, function (res) {
+                if (res.success) {
+                    Swal.fire({
+                        title: "¡Actualizado!",
+                        text: res.mensaje,
+                        icon: "success",
+                        confirmButtonText: "Aceptar"
+                    }).then((result) => {
+                        // LA CLAVE DEL TIEMPO REAL:
+                        // Refrescamos la página. Como el Controller ya actualizó la Session["MenuDinamico"],
+                        // el Layout se dibujará sin los módulos quitados.
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire("Error", res.mensaje, "error");
+                    $("#btnGuardar").prop("disabled", false).html('<i class="fas fa-save"></i> Guardar Cambios');
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,136 @@
+﻿@model IEnumerable<Gr01MonsterUniversity.Models.XEUSU_USUAR>
+
+@{
+    ViewBag.Title = "Gestión de Usuarios";
+}
+
+<style>
+    :root {
+        --mu-blue: #1e3c72;
+        --mu-dark-blue: #122a52;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-top: 20px;
+    }
+
+    .btn-circle {
+        border-radius: 50%;
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        line-height: 34px;
+        transition: 0.2s;
+        border: none;
+    }
+
+        .btn-circle:hover {
+            transform: scale(1.1);
+        }
+
+    .mu-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 15px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mu-header">
+            <h2 style="color: var(--mu-blue); font-weight: 800; margin: 0;">
+                <i class="fas fa-id-card-alt"></i> Directorio de Usuarios
+            </h2>
+            <button class="btn btn-primary" style="border-radius: 25px; font-weight: bold; background-color: var(--mu-blue);" onclick="nuevoUsuario()">
+                <i class="fas fa-plus-circle"></i> REGISTRAR NUEVO
+            </button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr style="color: var(--mu-blue); border-bottom: 2px solid var(--mu-blue);">
+                    <th><i class="fas fa-fingerprint"></i> Código / Login</th>
+                    <th><i class="fas fa-user-graduate"></i> Nombre Completo</th>
+                    <th><i class="fas fa-calendar-alt"></i> Fecha Registro</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><strong style="color: var(--mu-blue);">@item.PEEEMP_CODIGO</strong></td>
+                            <td>
+                                @if (item.PEEEMP_EMPLE != null)
+                                {
+                                    <span>@item.PEEEMP_EMPLE.PEEEMP_NOMBRES @item.PEEEMP_EMPLE.PEEEMP_APELLIDOS</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted"><i>Sin información de empleado</i></span>
+                                }
+                            </td>
+                            <td>@(item.XEUSU_FECCRE.HasValue ? item.XEUSU_FECCRE.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                            <td class="text-center">
+                                <button class="btn btn-info btn-circle" title="Editar" onclick="editarUsuario('@item.PEEEMP_CODIGO')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-circle" title="Eliminar" onclick="eliminarUsuario('@item.PEEEMP_CODIGO')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center" style="padding: 60px;">
+                            <i class="fas fa-search fa-3x" style="opacity: 0.2; display:block; margin-bottom: 15px;"></i>
+                            <p class="text-muted">No hay registros de usuarios disponibles.</p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function nuevoUsuario() {
+            Swal.fire({
+                title: 'Módulo en mantenimiento',
+                text: 'El registro de nuevos estudiantes está temporalmente fuera de servicio.',
+                icon: 'info',
+                confirmButtonColor: '#1e3c72'
+            });
+        }
+
+        function editarUsuario(id) {
+            Swal.fire('Info', 'Cargando expediente del estudiante: ' + id, 'info');
+        }
+
+        function eliminarUsuario(id) {
+            Swal.fire({
+                title: '¿Expulsar estudiante?',
+                text: "Esta acción eliminará el acceso del código " + id + " al sistema.",
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Cancelar'
+            });
+        }
+    </script>
+}
